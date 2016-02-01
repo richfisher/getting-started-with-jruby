@@ -1,10 +1,8 @@
 # Getting started with JRuby
 ## Preface
----
 I'm trying to do [some integration](https://github.com/richfisher/jruby_activiti) with jruby and java. I encountered some problems, and found that there were only a few information about jruby. So I write down my experience and share it.
 
 ## Install JRuby
----
 	rvm get head
 	rvm install jruby-9.0.4.0
 	
@@ -18,7 +16,6 @@ or create a `.ruby-version` file
 	
 
 ## Calling Java
----
 create a folder named `getting-started-with-jruby`, you can find the code in [Github](https://github.com/richfisher/getting-started-with-jruby)
 
 ### quick start
@@ -114,7 +111,6 @@ we can also calling java in caml style, and get the same result
 	puts lines
 
 ## Speedup initialization
----
 JRuby initialization is much more slower than MRI Ruby, and we will speedup it.
 
 ### --dev flag
@@ -157,7 +153,6 @@ Using `--dev` flag, we can roughly cut 45% time when initialization.
 
 
 ## Reference
----
 1. https://github.com/jruby/jruby/wiki/Improving-startup-time
 2. http://stackoverflow.com/questions/8283300/how-do-i-use-jruby-opts-with-rvm
 3. http://blog.headius.com/2009/05/jruby-nailgun-support-in-130.html
