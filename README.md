@@ -1,8 +1,9 @@
-# Getting started with JRuby
 ## Preface
-I'm trying to do [some integration](https://github.com/richfisher/jruby_activiti) with jruby and java. I encountered some problems, and found that there were only a few information about jruby. So I write down my experience and share it.
+I'm trying to do [some integrations](https://github.com/richfisher/jruby_activiti) with jruby and java. I encountered some problems, and found that there were only a few information about jruby. So I write down my experience and share it.
 
 ## Install JRuby
+Environment: Mac, rvm
+
 	rvm get head
 	rvm install jruby-9.0.4.0
 	
@@ -42,8 +43,6 @@ run `ruby calling-class-in-root.rb` in termial, and you will see the output. `He
 Everything in the Ruby load path is considered to be a classpath entry, so .class files under load path hierarchies are automatically available to be referenced from code.
 
 The classpath is typically set up through the CLASSPATH environment variable or passed to the java command using -cp or -classpath with a delimited list of filesystem locations.
-
-https://github.com/jruby/jruby/wiki/ClasspathAndLoadPath
 
 We can add classpath
 
@@ -130,6 +129,20 @@ RVM supports PROJECT_JRUBY_OPTS with two provided hook files (currently, after_u
 	chmod +x $rvm_path/hooks/after_use_jruby_opts
 	echo 'PROJECT_JRUBY_OPTS=(--dev)' > ~/.rvmrc
 
+### tools
+rails/spring MRI Ruby only, they use `fork` which doesn't work on JRuby
+
+spork, not work. start with error `TypeError: no implicit conversion of Fixnum into String`
+
+[theine](https://github.com/mrbrdo/theine) Rails pre-loader designed to work on JRuby
+gem install thenine
+`theine_server`
+`time thenine rake test` 4.882s
+`time theine runner "puts Rails.env"` 4.464s
+
+[drip](https://github.com/ninjudd/drip) Fast JVM launching
+not working with rails runner
+
 ### benchmark
 create two project.
 
@@ -141,19 +154,25 @@ rails new ruby-on-rails
 rvm use jruby-9.0.4.0
 gem install rails
 rails new jruby-on-rails
+
+time rake test
+time rails s
+time rails runner "puts Rails.env"
 ```
 
-|           | ruby   | jruby   | jruby --dev |
-|-----------|--------|---------|-------------|
-| rake test | 3.841s | 13.547s | 7.451s      |
-| rails s   | 4.796s | 20.914s | 11.833s     |
+|            | ruby   | jruby   | jruby --dev | theine|
+|------------|--------|---------|-------------|-------|
+| rake test  | 3.841s | 13.547s | 7.451s      |4.882s |
+| rails s    | 4.796s | 20.914s | 11.833s     |5.084s |
+|rails runner| 2.128s | 17.116s | 9.718s      |4.464s |
 
 
-Using `--dev` flag, we can roughly cut 45% time when initialization.
+Using `--dev` flag, we can roughly cut 45% time when initialization. And `theine` is a good option.
 
 
-## Reference
-1. https://github.com/jruby/jruby/wiki/Improving-startup-time
+## Reference 
+1. https://github.com/jruby/jruby/wiki/ClasspathAndLoadPath
+2. https://github.com/jruby/jruby/wiki/Improving-startup-time
 2. http://stackoverflow.com/questions/8283300/how-do-i-use-jruby-opts-with-rvm
 3. http://blog.headius.com/2009/05/jruby-nailgun-support-in-130.html
 4. https://github.com/mrbrdo/theine
