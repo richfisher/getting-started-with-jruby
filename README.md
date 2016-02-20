@@ -169,6 +169,18 @@ time rails runner "puts Rails.env"
 
 Using `--dev` flag, we can roughly cut 45% time when initialization. And `theine` is a good option.
 
+##  Performance
+While the start up time of JRuby is quite slow, how about the performance?
+
+Using `ab` to test the two blank rails projects.
+
+|                  | Ruby on Rails | JRuby on Rails |
+|------------------|---------------|----------------|
+| ab -n 1000 -c 1  | 22.103ms      | 16.275ms       |
+| ab -n 1000 -c 10 | 22.079ms      | 12.622ms       |
+| ab -n 1000 -c 50 | 22.051ms      | 12.236ms       |
+
+Well, looks good!
 
 ## Reference 
 1. https://github.com/jruby/jruby/wiki/ClasspathAndLoadPath

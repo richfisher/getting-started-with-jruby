@@ -181,6 +181,18 @@ time rails runner "puts Rails.env"
 
 总结：使用 `--dev` 参数可以减少大约45%的启动时间， 使用 `theine` 还能进一步加速.
 
+##  关于JRuby的运行效率
+JRuby的启动速度比较糟糕，运行效率又怎么样呢？
+
+还是对两个空白的Rails项目进行简单的测试
+
+|                  | Ruby on Rails | JRuby on Rails |
+|------------------|---------------|----------------|
+| ab -n 1000 -c 1  | 22.103ms      | 16.275ms       |
+| ab -n 1000 -c 10 | 22.079ms      | 12.622ms       |
+| ab -n 1000 -c 50 | 22.051ms      | 12.236ms       |
+
+虽然不代表真实的项目，从结果来看JRuby的运行效率是不错的。
 
 ## 参考资料 
 * https://github.com/jruby/jruby/wiki/ClasspathAndLoadPath
